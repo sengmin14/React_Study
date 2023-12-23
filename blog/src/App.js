@@ -26,7 +26,7 @@ function App() {
                                 따봉변경(copy);
                             }}>👍
                             </span>{따봉[i]}
-                        </h4> 
+                        </h4>
                         <p>2월 17일 발행</p>
                     </div>
                     )   
@@ -35,7 +35,7 @@ function App() {
             
 
             {
-                modal == true ? <Modal color={'skyBlue'} 글제목={글제목} title={title}/> : null
+                modal === true ? <Modal color={'skyBlue'} 글제목={글제목} 글제목변경 = {글제목변경} title={title}/> : null
             }
             
         </div>
