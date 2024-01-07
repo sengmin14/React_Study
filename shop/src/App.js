@@ -4,11 +4,11 @@ import { useState } from 'react';
 import data from './data.js';
 import Detail from './routes/Detail.js'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
-
+import axios from 'axios'
 
 function App() {
   
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -42,6 +42,19 @@ function App() {
             }
             </Row>
             </Container>
+            <button onClick={() => {
+              axios.get('https://codingapple1.github.io/shop/data2.json')
+              .then((data) => {
+                console.log(data.data)
+                console.log(shoes)
+                let copy = [...shoes, ...data.data];
+                setShoes(copy);
+              })
+              .catch(() => {
+                console.log('실패')
+              })
+
+            }}>더 보기</button>
           </div>
         }/>
 
@@ -71,9 +84,13 @@ const About = () =>  {
 
 
 const Card = (props) => {
+  let navigate = useNavigate();
+  let no = props.i - 1;
   return (
     <Col>
-      <img src={'https://codingapple1.github.io/shop/shoes'+ props.i +'.jpg'} width="80%"/>
+      <img src={'https://codingapple1.github.io/shop/shoes'+ props.i +'.jpg'} width="80%" onClick={() => {
+        navigate('/detail/'+no);
+      }}/>
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price}</p>
     </Col>
