@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { purchase } from '../Storage/Store';
 
 const Detail = (props) => {
   const { id } = useParams();
@@ -9,6 +11,10 @@ const Detail = (props) => {
   const [num, setNum] = useState('');
   const [tab, setTab] = useState(0);
 
+  let item = useSelector((state) => {
+    return state.item;
+  });
+  let dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
       setAlert(false);
@@ -49,7 +55,21 @@ const Detail = (props) => {
           <h4 className='pt-1'>{props.shoes[id].title}</h4>
           <p>{props.shoes[id].content}</p>
           <p>{props.shoes[id].price}</p>
-          <button className='btn btn-danger'>주문하기</button>
+          <button
+            className='btn btn-danger'
+            onClick={() => {
+              console.log(props.shoes[id]);
+              dispatch(
+                purchase({
+                  id: props.shoes[id].id,
+                  name: props.shoes[id].title,
+                  count: 1,
+                })
+              );
+            }}
+          >
+            카트에 담기
+          </button>
         </div>
       </div>
 
