@@ -1,101 +1,79 @@
-import {Navbar,Container, Nav, Row, Col} from 'react-bootstrap';
-import './App.css';
 import { useState } from 'react';
-import data from './data.js';
-import Detail from './routes/Detail.js'
-import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
-import axios from 'axios'
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import axios from 'axios';
+import Data from './Data/Data.js';
+import Card from './Component/Card.js';
+import Detail from './Component/Detail.js';
+import Cart from './Component/Cart.js';
 
 function App() {
-  
-  let [shoes, setShoes] = useState(data);
-  let navigate = useNavigate();
-
+  const [shoes, setShoes] = useState(Data);
+  const [buttonClickCount, setButtonClickCount] = useState(0);
+  const [count, setCount] = useState(2);
   return (
-    <div className="App">
-      <Navbar bg="light" data-bs-theme="light">
+    <div className='App'>
+      <Navbar bg='dark' variant='dark'>
         <Container>
-          <Navbar.Brand href="/">shoeShop</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link onClick={() => {navigate('/')}}>Home</Nav.Link>
-            <Nav.Link onClick={() => {navigate('/detail/0')}}>Detail</Nav.Link>
+          <Link to='/' className='margin'>
+            Navbar
+          </Link>
+          <Nav className='me-auto'>
+            <Link to='/detail/0' className='margin'>
+              상세페이지
+            </Link>
+            <Link to='/Cart' className='margin'>
+              카트
+            </Link>
           </Nav>
         </Container>
       </Navbar>
 
-
       <Routes>
-        <Route path="/" element={
-          <div>
-            <div className='main-bg'></div>
-            <Container>
-            <Row>
-            {/* <Card shoes={shoes[0]} i={1}/>
-            <Card shoes={shoes[1]} i={2}/>
-            <Card shoes={shoes[2]} i={3}/> */}
-            {
-              shoes.map((a, i) => {
-              return (
-                  <Card shoes={shoes[i]} i={i+1}/>
-              )
-              })
-            }
-            </Row>
-            </Container>
-            <button onClick={() => {
-              axios.get('https://codingapple1.github.io/shop/data2.json')
-              .then((data) => {
-                console.log(data.data)
-                console.log(shoes)
-                let copy = [...shoes, ...data.data];
-                setShoes(copy);
-              })
-              .catch(() => {
-                console.log('실패')
-              })
-
-            }}>더 보기</button>
-          </div>
-        }/>
-
-        <Route path="/detail/:id" element={<Detail shoes={shoes}/>}/>
-
-        <Route path="/about" element={<About/>}>
-          <Route path="member" element={<div>멤버임</div>}/>
-          <Route path="location" element={<div>위치정보임</div>}/>
-        </Route>
-        
+        <Route
+          path='/'
+          element={
+            <>
+              <div className='main-bg'></div>
+              <div className='container'>
+                <div className='row'>
+                  {shoes.map((a, i) => {
+                    return <Card shoes={shoes} i={i} key={i}></Card>;
+                  })}
+                </div>
+              </div>
+              <button
+                disabled={buttonClickCount >= 2}
+                onClick={() => {
+                  axios
+                    .get(
+                      'https://codingapple1.github.io/shop/data' +
+                        count +
+                        '.json'
+                    )
+                    .then((result) => {
+                      let copy = [...shoes, ...result.data];
+                      setShoes(copy);
+                      setButtonClickCount(buttonClickCount + 1);
+                      setCount(count + 1);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                }}
+              >
+                더 보기
+              </button>
+            </>
+          }
+        />
+        <Route path='/detail/:id' element={<Detail shoes={shoes}></Detail>} />
+        <Route path='/cart' element={<Cart></Cart>} />
+        <Route path='*' element={<div>없는 페이지 입니다.</div>} />
       </Routes>
-
-      
     </div>
   );
 }
-
-const About = () =>  {
-  return (
-    <div>
-      <h4>회사정보임</h4>
-      <Outlet></Outlet>
-    </div>
-  )
-}
-
-
-
-const Card = (props) => {
-  let navigate = useNavigate();
-  let no = props.i - 1;
-  return (
-    <Col>
-      <img src={'https://codingapple1.github.io/shop/shoes'+ props.i +'.jpg'} width="80%" onClick={() => {
-        navigate('/detail/'+no);
-      }}/>
-      <h4>{props.shoes.title}</h4>
-      <p>{props.shoes.price}</p>
-    </Col>
-  )
-}
-
 
 export default App;
