@@ -58,6 +58,7 @@ const Detail = (props) => {
           <button
             className='btn btn-danger'
             onClick={() => {
+              alert('카트에 담겼습니다.');
               console.log(props.shoes[id]);
               dispatch(
                 purchase({

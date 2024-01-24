@@ -31,14 +31,21 @@ let item = createSlice({
     changeCount(state, i) {
       state[i.payload].count = state[i.payload].count + 1;
     },
+    changeMinus(state, i) {
+      state[i.payload].count = state[i.payload].count - 1;
+    },
     purchase(state, action) {
       state.push(action.payload);
+      console.log(action.payload);
+    },
+    deleteItem(state, action) {
+      state.splice(action.payload, 1);
       console.log(action.payload);
     },
   },
 });
 
-export let { changeCount, purchase } = item.actions;
+export let { changeCount, changeMinus, purchase, deleteItem } = item.actions;
 
 export default configureStore({
   reducer: {

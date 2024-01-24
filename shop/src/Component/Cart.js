@@ -1,8 +1,11 @@
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeName } from '../Storage/Store';
-import { changeAge } from '../Storage/Store';
-import { changeCount } from '../Storage/Store';
+import {
+  changeCount,
+  changeMinus,
+  changeAge,
+  deleteItem,
+} from '../Storage/Store';
 
 const Cart = () => {
   let item = useSelector((state) => {
@@ -52,6 +55,17 @@ const Cart = () => {
                     }}
                   >
                     +
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (item[i].count > 1) {
+                        dispatch(changeMinus(i));
+                      } else {
+                        dispatch(deleteItem(i));
+                      }
+                    }}
+                  >
+                    ㅡ
                   </button>
                 </td>
               </tr>
