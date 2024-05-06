@@ -19,6 +19,8 @@ const ReactQuery = () => {
         select: (data) => {
             return data.data; // 서버에서 받은 데이터 중 어떤 값만 return 할지 정할수 있다.
         },
+        // gcTime은 v5부터 하위 버전은 cacheTime이라고 함
+        gcTime: 5000, // ms단위 5초마다 캐시를 비운다.(기본값은 5분)
     });
     console.log('ddd', data, isLoading);
     console.log('error', isError, error);
